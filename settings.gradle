@@ -1,0 +1,2 @@
+rootProject.name='FrontCam Game'
+include ':app'
