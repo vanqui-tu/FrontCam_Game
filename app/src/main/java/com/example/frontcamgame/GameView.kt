@@ -1,4 +1,5 @@
 package com.example.frontcamgame
+
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
@@ -64,7 +65,7 @@ class GameView(context: Context, attributes: AttributeSet): SurfaceView(context,
         }
 
         // GAME PANEL
-        gameOver = GameOver(this.context)
+        gameOver = GameOver()
         perfomance = Perfomance(thread)
     }
 
@@ -111,7 +112,7 @@ class GameView(context: Context, attributes: AttributeSet): SurfaceView(context,
         super.draw(canvas)
         // cái nào vẽ trc thì nằm ở dưới
 
-        createMap(canvas)
+        // createMap(canvas)
         // Draw barriers
         for(i in 0..MAX_BARRIERS_ON_SCREEN-1){
             barriers[i].draw(canvas)
@@ -225,5 +226,8 @@ class GameView(context: Context, attributes: AttributeSet): SurfaceView(context,
         var dest = Rect(0, 0, getWidth(), getHeight());
         paint.setFilterBitmap(true)
         canvas.drawBitmap(map!!, null, dest, paint);
+    }
+    fun update_x_y(x: Int, y: Int){
+        player!!.updateTouch(x, y);
     }
 }

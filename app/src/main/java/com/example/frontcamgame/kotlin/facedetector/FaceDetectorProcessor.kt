@@ -18,6 +18,7 @@ package com.example.frontcamgame.kotlin.facedetector
 
 import android.content.Context
 import android.util.Log
+import com.example.frontcamgame.GameView
 import com.google.android.gms.tasks.Task
 import com.google.mlkit.vision.common.InputImage
 import com.example.frontcamgame.GraphicOverlay
@@ -34,6 +35,7 @@ class FaceDetectorProcessor(context: Context, detectorOptions: FaceDetectorOptio
   VisionProcessorBase<List<Face>>(context) {
 
   private val detector: FaceDetector
+  private var _faces: List<Face>? = null
 
   init {
     val options = detectorOptions
@@ -45,6 +47,7 @@ class FaceDetectorProcessor(context: Context, detectorOptions: FaceDetectorOptio
     detector = FaceDetection.getClient(options)
 
     Log.v(MANUAL_TESTING_LOG, "Face detector options: $options")
+
   }
 
   override fun stop() {
@@ -57,15 +60,24 @@ class FaceDetectorProcessor(context: Context, detectorOptions: FaceDetectorOptio
   }
 
   override fun onSuccess(faces: List<Face>, graphicOverlay: GraphicOverlay) {
+    _faces = faces
     for (face in faces) {
       graphicOverlay.add(FaceGraphic(graphicOverlay, face))
       logExtrasForTesting(face)
     }
+
+  }
+
+  fun _updateGame(gameView: GameView){
+    if(_faces!!.size > 0)
+      gameView.update_x_y(_faces!![0].boundingBox.centerX(),
+                _faces!![0].boundingBox.centerY())
   }
 
   override fun onFailure(e: Exception) {
     Log.e(TAG, "Face detection failed $e")
   }
+
 
   companion object {
     private const val TAG = "FaceDetectorProcessor"

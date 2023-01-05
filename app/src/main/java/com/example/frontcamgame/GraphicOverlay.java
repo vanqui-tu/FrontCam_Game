@@ -49,7 +49,10 @@ import java.util.List;
  *       coordinate from the image's coordinate system to the view coordinate system.
  * </ol>
  */
+
+
 public class GraphicOverlay extends View {
+
   private final Object lock = new Object();
   private final List<Graphic> graphics = new ArrayList<>();
   // Matrix for transforming from image coordinates to overlay view coordinates.
@@ -177,7 +180,7 @@ public class GraphicOverlay extends View {
       // When visualizeZ is true, sets up the paint to different colors based on z values.
       // Gets the range of z value.
       float zLowerBoundInScreenPixel;
-      float zUpperBoundInScreenPixel;
+      float zUpperBoundInScreenPixel; // ông mở bằng chrome hả
 
       if (rescaleZForVisualization) {
         zLowerBoundInScreenPixel = min(-0.001f, scale(zMin));

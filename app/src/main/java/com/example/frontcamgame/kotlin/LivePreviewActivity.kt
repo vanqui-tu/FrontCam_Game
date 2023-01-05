@@ -29,11 +29,8 @@ import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.Toast
 import android.widget.ToggleButton
+import com.example.frontcamgame.*
 import com.google.android.gms.common.annotation.KeepName
-import com.example.frontcamgame.CameraSource
-import com.example.frontcamgame.CameraSourcePreview
-import com.example.frontcamgame.GraphicOverlay
-import com.example.frontcamgame.R
 import com.example.frontcamgame.kotlin.facedetector.FaceDetectorProcessor
 import com.example.frontcamgame.preference.PreferenceUtils
 import com.example.frontcamgame.preference.SettingsActivity
@@ -50,13 +47,17 @@ class LivePreviewActivity :
   private var preview: CameraSourcePreview? = null
   private var graphicOverlay: GraphicOverlay? = null
   private var selectedModel = FACE_DETECTION
+  private var gameView: GameView? = null //
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     Log.d(TAG, "onCreate")
     setContentView(R.layout.activity_vision_live_preview)
 
-    preview = findViewById(R.id.preview_view)
+    preview = findViewById(R.id.preview_view) //
+
+    gameView = findViewById(R.id.game_view)
+
     if (preview == null) {
       Log.d(TAG, "Preview is null")
     }
@@ -128,11 +129,15 @@ class LivePreviewActivity :
       when (model) {
 
         FACE_DETECTION -> {
+
           Log.i(TAG, "Using Face Detector Processor")
           val faceDetectorOptions = PreferenceUtils.getFaceDetectorOptions(this)
+          val faceDetectorProcessor = FaceDetectorProcessor(this, faceDetectorOptions)
+          faceDetectorProcessor._updateGame(gameView!!)
           cameraSource!!.setMachineLearningFrameProcessor(
-            FaceDetectorProcessor(this, faceDetectorOptions)
+            faceDetectorProcessor
           )
+
         }
 
         else -> Log.e(TAG, "Unknown model: $model")

@@ -6,7 +6,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 
-class GameOver(context: Context) {
+class GameOver() {
     private final var endGame:String = "Game Over"
     private final var paint = Paint()
     private final var PAINT_COLOR = Color.RED

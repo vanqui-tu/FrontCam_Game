@@ -48,6 +48,7 @@ public class CameraSourcePreview extends ViewGroup {
     surfaceView = new SurfaceView(context);
     surfaceView.getHolder().addCallback(new SurfaceCallback());
     addView(surfaceView);
+
   }
 
   private void start(CameraSource cameraSource) throws IOException {
