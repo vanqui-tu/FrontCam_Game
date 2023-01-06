@@ -39,10 +39,10 @@ import com.google.android.odml.image.MlImage
 import com.google.mlkit.common.MlKitException
 import com.google.mlkit.vision.common.InputImage
 import com.example.frontcamgame.BitmapUtils
-import com.example.frontcamgame.CameraImageGraphic
+//import com.example.frontcamgame.CameraImageGraphic
 import com.example.frontcamgame.FrameMetadata
 import com.example.frontcamgame.GraphicOverlay
-import com.example.frontcamgame.InferenceInfoGraphic
+//import com.example.frontcamgame.InferenceInfoGraphic
 import com.example.frontcamgame.ScopedExecutor
 import com.example.frontcamgame.VisionImageProcessor
 import com.example.frontcamgame.preference.PreferenceUtils
@@ -338,20 +338,20 @@ abstract class VisionProcessorBase<T>(context: Context) : VisionImageProcessor {
             Log.d(TAG, "Memory available in system: $availableMegs MB")
           }
           graphicOverlay.clear()
-          if (originalCameraImage != null) {
-            graphicOverlay.add(CameraImageGraphic(graphicOverlay, originalCameraImage))
-          }
+//          if (originalCameraImage != null) {
+//            //graphicOverlay.add(CameraImageGraphic(graphicOverlay, originalCameraImage))
+//          }
           this@VisionProcessorBase.onSuccess(results, graphicOverlay)
-          if (!PreferenceUtils.shouldHideDetectionInfo(graphicOverlay.context)) {
-            graphicOverlay.add(
-              InferenceInfoGraphic(
-                graphicOverlay,
-                currentFrameLatencyMs,
-                currentDetectorLatencyMs,
-                if (shouldShowFps) framesPerSecond else null
-              )
-            )
-          }
+//          if (!PreferenceUtils.shouldHideDetectionInfo(graphicOverlay.context)) {
+//            graphicOverlay.add(
+//              InferenceInfoGraphic(
+//                graphicOverlay,
+//                currentFrameLatencyMs,
+//                currentDetectorLatencyMs,
+//                if (shouldShowFps) framesPerSecond else null
+//              )
+//            )
+//          }
           graphicOverlay.postInvalidate()
         }
       )

@@ -112,7 +112,7 @@ class GameView(context: Context, attributes: AttributeSet): SurfaceView(context,
         super.draw(canvas)
         // cái nào vẽ trc thì nằm ở dưới
 
-        // createMap(canvas)
+        createMap(canvas)
         // Draw barriers
         for(i in 0..MAX_BARRIERS_ON_SCREEN-1){
             barriers[i].draw(canvas)
@@ -221,7 +221,7 @@ class GameView(context: Context, attributes: AttributeSet): SurfaceView(context,
         map = BitmapFactory.decodeResource(resources, R.drawable.background)
     }
     private fun createMap(canvas: Canvas){
-        //var map = BitmapFactory.decodeResource(resources, R.drawable.background)
+        var map = BitmapFactory.decodeResource(resources, R.drawable.background)
         var paint = Paint()
         var dest = Rect(0, 0, getWidth(), getHeight());
         paint.setFilterBitmap(true)

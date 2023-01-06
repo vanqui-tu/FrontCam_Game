@@ -89,7 +89,7 @@ class LivePreviewActivity :
       startActivity(intent)
     }
 
-    createCameraSource(selectedModel)
+    //createCameraSource(selectedModel)
   }
 
   @Synchronized
@@ -132,8 +132,7 @@ class LivePreviewActivity :
 
           Log.i(TAG, "Using Face Detector Processor")
           val faceDetectorOptions = PreferenceUtils.getFaceDetectorOptions(this)
-          val faceDetectorProcessor = FaceDetectorProcessor(this, faceDetectorOptions)
-          faceDetectorProcessor._updateGame(gameView!!)
+          val faceDetectorProcessor = FaceDetectorProcessor(this, faceDetectorOptions, gameView)
           cameraSource!!.setMachineLearningFrameProcessor(
             faceDetectorProcessor
           )

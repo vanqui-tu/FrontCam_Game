@@ -31,11 +31,11 @@ import com.google.mlkit.vision.face.FaceLandmark
 import java.util.Locale
 
 /** Face Detector Demo.  */
-class FaceDetectorProcessor(context: Context, detectorOptions: FaceDetectorOptions?) :
+class FaceDetectorProcessor(context: Context, detectorOptions: FaceDetectorOptions?, gameView: GameView?) :
   VisionProcessorBase<List<Face>>(context) {
 
   private val detector: FaceDetector
-  private var _faces: List<Face>? = null
+  private val gameview: GameView?
 
   init {
     val options = detectorOptions
@@ -45,6 +45,7 @@ class FaceDetectorProcessor(context: Context, detectorOptions: FaceDetectorOptio
         .build()
 
     detector = FaceDetection.getClient(options)
+    gameview = gameView
 
     Log.v(MANUAL_TESTING_LOG, "Face detector options: $options")
 
@@ -60,18 +61,17 @@ class FaceDetectorProcessor(context: Context, detectorOptions: FaceDetectorOptio
   }
 
   override fun onSuccess(faces: List<Face>, graphicOverlay: GraphicOverlay) {
-    _faces = faces
     for (face in faces) {
-      graphicOverlay.add(FaceGraphic(graphicOverlay, face))
-      logExtrasForTesting(face)
+      val faceGraphic = FaceGraphic(graphicOverlay, face)
+      graphicOverlay.add(faceGraphic)
+      //logExtrasForTesting(face)
+      updatePlayer(faceGraphic.translateX(face.allContours[11].points[1].x), faceGraphic.translateY(face.allContours[11].points[1].y))
     }
 
   }
 
-  fun _updateGame(gameView: GameView){
-    if(_faces!!.size > 0)
-      gameView.update_x_y(_faces!![0].boundingBox.centerX(),
-                _faces!![0].boundingBox.centerY())
+  fun updatePlayer(x: Float, y: Float){
+    gameview?.update_x_y(x.toInt(),y.toInt())
   }
 
   override fun onFailure(e: Exception) {
