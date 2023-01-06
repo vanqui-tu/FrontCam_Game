@@ -41,10 +41,12 @@ class Player(bitmap: Array<Bitmap>): GameObject(bitmap) {
     }
 
     override fun draw(canvas: Canvas) {
-        super.draw(canvas)
+
         if(health > 0) {
             scorePlayer!!.draw(canvas)
             healthBar!!.draw(canvas)
+
+            super.draw(canvas)
         }
         else{
             gameOver!!.draw(canvas)
@@ -60,8 +62,12 @@ class Player(bitmap: Array<Bitmap>): GameObject(bitmap) {
         health = Math.max(Math.min(health - damage, 100), 0)
     }
 
-    fun getScore(): Double{
+    fun getBonusScore(): Double{
         return score
+    }
+
+    fun getScore(): Int{
+        return scorePlayer!!.getScore().toInt()
     }
 
     fun setBonusScore(bonus: Double){
@@ -69,4 +75,5 @@ class Player(bitmap: Array<Bitmap>): GameObject(bitmap) {
         scorePlayer!!.update()
         score = 0.0
     }
+
 }

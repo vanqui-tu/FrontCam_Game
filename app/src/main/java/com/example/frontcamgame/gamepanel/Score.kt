@@ -22,7 +22,7 @@ class Score(player: Player): PlayerEffect(player) {
     }
 
     override fun update() {
-        playerScore += player!!.getScore() + SCORE_UPDATE
+        playerScore += player!!.getBonusScore() + SCORE_UPDATE
     }
 
     fun getScore(): Int{
