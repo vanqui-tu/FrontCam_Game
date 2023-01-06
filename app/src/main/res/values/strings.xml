@@ -156,4 +156,7 @@
     <string name="pref_title_face_mesh_use_case" translatable="false">Use Case</string>
     <string name="pref_key_face_mesh_use_case" translatable="false">face_mesh_use_case</string>
 
+    <string name="facebook_app_id">1243932759522988</string>
+    <string name="fb_login_protocol_scheme">fb1234</string>
+    <string name="facebook_client_token">be3b689b88da92ee09175c6d6e0fded3</string>
 </resources>
