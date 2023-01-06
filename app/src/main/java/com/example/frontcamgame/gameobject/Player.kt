@@ -3,45 +3,70 @@ package com.example.mygame.gameobject
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.util.Log
+import com.example.frontcamgame.gamepanel.Score
+import com.example.mygame.gamepanel.GameOver
 import com.example.mygame.gamepanel.HealthBar
 
 // Main character
 
 class Player(bitmap: Array<Bitmap>): GameObject(bitmap) {
     private final var MAX_HEALTH = 100
+    private final val INITIAL_SCORE = 0.0
+
     private var health = MAX_HEALTH
     private var healthBar: HealthBar? = HealthBar(this)
+
+    private var score = INITIAL_SCORE
+    private var scorePlayer: Score? = Score(this)
+    private var gameOver: GameOver? = GameOver(scorePlayer!!)
+
     private var SPEED = 2
 
     init {
-        x = screenWidth / 2
-        y = screenHeight / 2
+        x = (screenWidth / 2).toFloat()
+        y = (screenHeight / 2).toFloat()
+
         healthBar!!.update()
     }
 
     override fun update(){
         healthBar!!.update()
+        scorePlayer!!.update()
         indexSelected = (indexSelected + SPEED) % bitmap.size
     }
 
-    override fun updateTouch(touch_x: Int, touch_y: Int) {
-        x = touch_x - w!! / 2
-        y = touch_y - h!! / 2
-
-        healthBar!!.update()
+    fun updateByMovement(_x: Float, _y: Float) {
+        x = _x - w!! / 2
+        y = _y - h!! / 2
     }
 
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
-        healthBar!!.draw(canvas)
+        if(health > 0) {
+            scorePlayer!!.draw(canvas)
+            healthBar!!.draw(canvas)
+        }
+        else{
+            gameOver!!.draw(canvas)
+        }
     }
+
     fun getHealthPercentage(): Int{
         //Log.d("Health bar", health.toString())
         return health * 100 / MAX_HEALTH
     }
 
     fun getDamaged(damage: Int){
-        health = Math.max(health - damage, 0)
+        health = Math.max(Math.min(health - damage, 100), 0)
     }
 
+    fun getScore(): Double{
+        return score
+    }
+
+    fun setBonusScore(bonus: Double){
+        score = bonus
+        scorePlayer!!.update()
+        score = 0.0
+    }
 }

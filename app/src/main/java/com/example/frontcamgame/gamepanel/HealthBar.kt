@@ -4,14 +4,13 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.util.Log
+import com.example.frontcamgame.gamepanel.PlayerEffect
 import com.example.mygame.gameobject.Player
+import com.google.android.gms.common.internal.FallbackServiceBroker
 
-class HealthBar(player: Player){
-    private var player = player
-    private var x: Float = 0F
-    private var y: Float = 0F
-    private var w: Int = player.w!!
-    private var h: Int = 30
+class HealthBar(player: Player): PlayerEffect(player){
+    private var center_x: Float = 0F
+    private var healthPercent: Int = 0
 
     // Left, Right, Bottom, Top
     private var fullHealthBarRec = arrayOf(0F,0F,0F,0F)
@@ -22,37 +21,64 @@ class HealthBar(player: Player){
     private var paintHealth = Paint()
 
     init {
+        w = player.w!!
+        h = 30
         paintHealth.setColor(Color.GREEN)
-        paintFullHealth.setColor(Color.LTGRAY)
+        paintFullHealth.setColor(Color.GRAY)
     }
-    fun draw(canvas: Canvas){
+
+    override fun draw(canvas: Canvas){
+        drawFullHeathbar(canvas)
+        drawHealthbar(canvas)
+    }
+
+    override fun update(){
+        x = player.x
+        y = player.y
+        center_x = (x + w / 2).toFloat()
+
+        healthPercent = player.getHealthPercentage() * 2 * w / 100
+        updateFullHealthbar()
+        updateHealthbar()
+    }
+
+    private fun drawFullHeathbar(canvas: Canvas){
         canvas.drawRect(fullHealthBarRec[0],
-                        fullHealthBarRec[3],
-                        fullHealthBarRec[1],
-                        fullHealthBarRec[2],
-                        paintFullHealth)
+            fullHealthBarRec[3],
+            fullHealthBarRec[1],
+            fullHealthBarRec[2],
+            paintFullHealth)
 
-        canvas.drawRect(healthBarRec[0],
-                        healthBarRec[3],
-                        healthBarRec[1],
-                        healthBarRec[2],
-                        paintHealth)
     }
 
-    fun update(){
-        x = player.x.toFloat()
-        y = player.y.toFloat()
+    private fun drawHealthbar(canvas: Canvas){
+        canvas.drawRect(healthBarRec[0],
+            healthBarRec[3],
+            healthBarRec[1],
+            healthBarRec[2],
+            paintHealth)
+    }
 
-        var percent = player.getHealthPercentage() * w / 100
-        fullHealthBarRec[0] = x
-        fullHealthBarRec[1] = x + w
+    private fun updateFullHealthbar(){
+        fullHealthBarRec[0] = center_x - w
+        fullHealthBarRec[1] = center_x + w
         fullHealthBarRec[2] = y - marginBottom
         fullHealthBarRec[3] = fullHealthBarRec[2] - h
+    }
 
-        Log.d("Health bar", percent.toString())
+    private fun updateHealthbar(){
         healthBarRec[0] = fullHealthBarRec[0]
-        healthBarRec[1] = healthBarRec[0] + percent
+        healthBarRec[1] = healthBarRec[0] + healthPercent
         healthBarRec[2] = fullHealthBarRec[2]
         healthBarRec[3] = fullHealthBarRec[3]
+
+        if(healthPercent >= 80)
+            paintHealth.setColor(Color.GREEN)
+        else if(healthPercent >= 65)
+            paintHealth.setColor(Color.argb(255, 255,127,80))
+        else if(healthPercent >= 50)
+            paintHealth.setColor(Color.argb(255, 255,99,71))
+        else
+            paintHealth.setColor(Color.argb(255, 255,69,0))
     }
 }

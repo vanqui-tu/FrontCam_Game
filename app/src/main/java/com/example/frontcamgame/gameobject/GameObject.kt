@@ -5,8 +5,8 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 
 abstract class GameObject(var bitmap: Array<Bitmap>) {
-    var x: Int = 0
-    var y: Int = 0
+    var x: Float = 0.0F
+    var y: Float = 0.0F
     protected var velocityX: Float = 0F
     protected var velocityY: Float = 0F
 
@@ -26,16 +26,15 @@ abstract class GameObject(var bitmap: Array<Bitmap>) {
 
     open fun draw(canvas: Canvas){
         canvas.drawBitmap(bitmap[indexSelected],
-            x.toFloat(), y.toFloat(), null)
+            x, y, null)
     }
 
 
     abstract fun update();
-    abstract fun updateTouch(touch_x: Int, touch_y: Int);
     fun getDistanceBetweenObjects(other_obj: GameObject): Int {
         return Math.sqrt(
-            Math.pow((x - other_obj.x).toDouble(), 2.0) +
-            Math.pow((y - other_obj.y).toDouble(), 2.0)
+            Math.pow((x + this.w!! / 2 - (other_obj.x + other_obj.w!! / 2)).toDouble(), 2.0) +
+            Math.pow((y + this.h!! / 2 - (other_obj.y + other_obj.h!! / 2)).toDouble(), 2.0)
         ).toInt()
     }
 }

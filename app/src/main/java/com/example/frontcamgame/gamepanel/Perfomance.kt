@@ -10,6 +10,12 @@ import com.example.frontcamgame.GameThread
 class Perfomance(thread: GameThread) {
     private final var thread = thread
     private var avgFPS: Double = 0.0
+    private var paint = Paint();
+
+    init {
+        paint.setColor(Color.WHITE)
+        paint.setTextSize(50.0F)
+    }
 
     fun draw(canvas: Canvas){
         drawFPS(canvas)
@@ -17,11 +23,7 @@ class Perfomance(thread: GameThread) {
 
     fun drawFPS(canvas: Canvas){
         avgFPS = thread.getAverageFPS()
-        var paint = Paint()
-        paint.setColor(Color.WHITE)
-        paint.setTextSize(50.0F);
-
         canvas.drawText("FPS: " + avgFPS.toString(),
-                        150F, 150F, paint);
+                        150F, 250F, paint)
     }
 }

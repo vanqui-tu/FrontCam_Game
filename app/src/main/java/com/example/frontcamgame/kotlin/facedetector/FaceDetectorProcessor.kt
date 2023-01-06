@@ -35,7 +35,7 @@ class FaceDetectorProcessor(context: Context, detectorOptions: FaceDetectorOptio
   VisionProcessorBase<List<Face>>(context) {
 
   private val detector: FaceDetector
-  private val gameview: GameView?
+  private val gameview = gameView
 
   init {
     val options = detectorOptions
@@ -45,7 +45,6 @@ class FaceDetectorProcessor(context: Context, detectorOptions: FaceDetectorOptio
         .build()
 
     detector = FaceDetection.getClient(options)
-    gameview = gameView
 
     Log.v(MANUAL_TESTING_LOG, "Face detector options: $options")
 
@@ -65,13 +64,14 @@ class FaceDetectorProcessor(context: Context, detectorOptions: FaceDetectorOptio
       val faceGraphic = FaceGraphic(graphicOverlay, face)
       graphicOverlay.add(faceGraphic)
       //logExtrasForTesting(face)
-      updatePlayer(faceGraphic.translateX(face.allContours[11].points[1].x), faceGraphic.translateY(face.allContours[11].points[1].y))
+      updatePlayer(faceGraphic.translateX(face.allContours[11].points[1].x),
+        faceGraphic.translateY(face.allContours[11].points[1].y))
     }
 
   }
 
   fun updatePlayer(x: Float, y: Float){
-    gameview?.update_x_y(x.toInt(),y.toInt())
+    gameview?.updatePlayer(x,y)
   }
 
   override fun onFailure(e: Exception) {
@@ -138,9 +138,9 @@ class FaceDetectorProcessor(context: Context, detectorOptions: FaceDetectorOptio
             Log.v(
               MANUAL_TESTING_LOG,
               "Position for face landmark: " +
-                landMarkTypesStrings[i] +
-                " is :" +
-                landmarkPositionStr
+                      landMarkTypesStrings[i] +
+                      " is :" +
+                      landmarkPositionStr
             )
           }
         }

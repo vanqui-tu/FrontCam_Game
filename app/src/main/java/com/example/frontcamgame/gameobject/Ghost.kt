@@ -1,40 +1,36 @@
 package com.example.mygame.gameobject
 
 import android.graphics.Bitmap
+import com.example.frontcamgame.gameobject.EffectObject
 
-class Ghost(bitmap: Array<Bitmap>, player: Player, _velocity: Float = 30F): GameObject(bitmap) {
-    private var player: Player = player
+class Ghost(bitmap: Array<Bitmap>,
+            player: Player,
+            _velocity: Float = 30F): EffectObject(bitmap, player, _velocity) {
     private var slope: Double = 0.0
-    private var velocity: Float = _velocity
-    private var x_double: Double = 0.0
-    private var y_double: Double = 0.0
-
-    private final var incrementalVelocity = .3F
-
-    private final val damageToPlayer: Int = 10
-    private final val collideDistance: Int = (w!! + h!!) / 3
 
     init {
+        incrementalVelocity = .3F
+        damageToPlayer = 10
+        collideDistance = (w!! + h!!) / 2
+
         calculateVX_VY(velocity)
     }
 
     override fun update() {
-        x_double += velocityX
-        y_double += velocityY
-        if(x_double < 0 || x_double.toInt() >= screenWidth ||
-            y_double.toInt() > screenHeight){
+        x += velocityX
+        y += velocityY
+        if(x < 0 || x.toInt() >= screenWidth ||
+            y.toInt() > screenHeight){
            reset()
         }
-        x = x_double.toInt()
-        y = y_double.toInt()
         isCollided()
     }
 
     private fun calculateVX_VY(veloc: Float){
-        x_double = (0..screenWidth).random().toDouble()
-        y_double = -(1..3).random() * w!!.toDouble()
+        x = (0..screenWidth).random().toFloat()
+        y = -(1..10).random() * w!!.toFloat()
 
-        slope = (player.y - y_double).toDouble() / (player.x - x_double).toDouble()
+        slope = (player.y - y).toDouble() / (player.x - x).toDouble()
         if(Math.abs(slope) < 1E-5){
             velocityX = 0F
             velocityY = veloc
@@ -52,21 +48,11 @@ class Ghost(bitmap: Array<Bitmap>, player: Player, _velocity: Float = 30F): Game
         }
     }
 
-    fun isCollided(){
-        if(this.getDistanceBetweenObjects(player) < collideDistance){
-            player.getDamaged(damageToPlayer)
-            reset()
-        }
-    }
-
-    fun reset(){
+    override fun reset(){
         velocity += incrementalVelocity
         indexSelected = (0..bitmap.size - 1).random()
         calculateVX_VY(velocity)
     }
 
-    override fun updateTouch(touch_x: Int, touch_y: Int) {
-        TODO("Not yet implemented")
-    }
 
 }

@@ -72,6 +72,7 @@ class GameThread(private val surfaceHolder: SurfaceHolder,
                 e.printStackTrace()
             }
 
+            startTimeFPS += if (waitTime > 0) waitTime else 0
             timeLapse = (System.currentTimeMillis() - startTimeFPS)
             if(timeLapse >= 1000){
                 avgFPS = frameCount / (1E-3 * timeLapse)

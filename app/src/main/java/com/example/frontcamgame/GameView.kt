@@ -7,34 +7,44 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import android.widget.Button
+import com.example.frontcamgame.gamemap.TitleMap
+import com.example.frontcamgame.gameobject.BadApple
+import com.example.frontcamgame.gameobject.BonusApple
 import com.example.mygame.gameobject.Barrier
 import com.example.mygame.gameobject.Ghost
 import com.example.mygame.gameobject.Player
 import com.example.mygame.gamepanel.GameOver
 import com.example.mygame.gamepanel.Perfomance
+import kotlinx.android.synthetic.main.activity_vision_live_preview.view.*
 
 class GameView(context: Context, attributes: AttributeSet): SurfaceView(context, attributes), SurfaceHolder.Callback{
     private var thread: GameThread
 
-    private var touched: Boolean = false
-    private var touched_x: Int = 0
-    private var touched_y: Int = 0
-
     // Bitmap
     private final val MAX_BARRIERS_ON_SCREEN = 3;
     private final val MAX_GHOSTS_ON_SCREEN = 4;
+    private final val MAX_BAD_APPLES_ON_SCREEN = 2;
+    private final val MAX_BONUS_APPLES_ON_SCREEN = 2;
 
     private final var player_bitmaps = emptyArray<Bitmap>()
     private final var barrier_bitmaps = emptyArray<Bitmap>()
     private final var ghost_bitmaps = emptyArray<Bitmap>()
-    private final var map: Bitmap? = null
-    // Objects
-    private final var player: Player? = null
-    private final var barriers = emptyArray<Barrier>()
-    private final var ghosts = emptyArray<Ghost>()
+    private final var badapple_bitmaps = emptyArray<Bitmap>()
+    private final var bonusapple_bitmaps = emptyArray<Bitmap>()
 
-    private final var gameOver: GameOver? = null
-    private final var perfomance: Perfomance? = null
+    private final var map_bitmaps = emptyArray<Bitmap>()
+
+    // Objects
+    private var player: Player? = null
+    private var barriers = emptyArray<Barrier>()
+    private var ghosts = emptyArray<Ghost>()
+    private var badApples = emptyArray<BadApple>()
+    private var bonusApples = emptyArray<BonusApple>()
+    private var map: TitleMap? = null
+
+    private var perfomance: Perfomance? = null
+    private var gameOver = false
 
     init{
         // add callback
@@ -45,27 +55,9 @@ class GameView(context: Context, attributes: AttributeSet): SurfaceView(context,
         // CREATE BITMAP
         createBitmaps()
 
-        // GAME OBJECT
-        player = Player(player_bitmaps)
-        for (i in 0..MAX_BARRIERS_ON_SCREEN-1){
-            barriers += Barrier(
-                barrier_bitmaps,
-                player!!,
-                i,
-                MAX_BARRIERS_ON_SCREEN
-            )
-        }
-
-        for (i in 0..MAX_GHOSTS_ON_SCREEN-1){
-            ghosts += Ghost(
-                ghost_bitmaps,
-                player!!,
-                (20..30).random().toFloat()
-            )
-        }
+        resetAll()
 
         // GAME PANEL
-        gameOver = GameOver()
         perfomance = Perfomance(thread)
     }
 
@@ -89,30 +81,44 @@ class GameView(context: Context, attributes: AttributeSet): SurfaceView(context,
     }
 
     fun update(){
-
         if(player!!.getHealthPercentage() == 0){
+            gameOver = true
             return
         }
+
+        // update BadApples
+        for(i in 0 .. MAX_BAD_APPLES_ON_SCREEN-1)
+            badApples[i].update()
+
+        // update BonusApples
+        for(i in 0 .. MAX_BONUS_APPLES_ON_SCREEN-1)
+            bonusApples[i].update()
 
         // update Barriers
         for(i in 0 .. MAX_BARRIERS_ON_SCREEN-1)
             barriers[i].update()
-
 
         // Update Ghosts
         for(i in 0 .. MAX_GHOSTS_ON_SCREEN-1)
             ghosts[i].update()
         // Update Player
         player!!.update()
-        // update if touch screen
-        updateIfTouched()
     }
 
     override fun draw(canvas: Canvas){
         super.draw(canvas)
         // cái nào vẽ trc thì nằm ở dưới
 
-        createMap(canvas)
+        map!!.draw(canvas)
+
+        // Draw BadApples
+        for(i in 0 .. MAX_BAD_APPLES_ON_SCREEN-1)
+            badApples[i].draw(canvas)
+
+        // draw BonusApples
+        for(i in 0 .. MAX_BONUS_APPLES_ON_SCREEN-1)
+            bonusApples[i].draw(canvas)
+
         // Draw barriers
         for(i in 0..MAX_BARRIERS_ON_SCREEN-1){
             barriers[i].draw(canvas)
@@ -123,46 +129,76 @@ class GameView(context: Context, attributes: AttributeSet): SurfaceView(context,
             ghosts[i].draw(canvas)
         }
 
+        perfomance!!.draw(canvas)
 
         // Draw player (main character)
         player!!.draw(canvas)
 
-        perfomance!!.draw(canvas)
+    }
+     fun onPause(){
+         thread.stopLoop()
+     }
 
-        if (player!!.getHealthPercentage() == 0){
-            gameOver!!.draw(canvas)
-        }
-
-
+    fun updatePlayer(x: Float, y: Float){
+        player!!.updateByMovement(x, y);
     }
 
+    fun resetAll(){
+        gameOver = false
+        // GAME OBJECT
 
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        // when ever there is a touch on the screen,
-        // we can get the position of touch
-        // which we may use it for tracking some of the game objects
-        touched_x = event.x.toInt()
-        touched_y = event.y.toInt()
+        // Player
+        player = Player(player_bitmaps)
 
-        val action = event.action
-        when (action) {
-            MotionEvent.ACTION_DOWN -> touched = true
-            MotionEvent.ACTION_MOVE -> touched = true
-            MotionEvent.ACTION_UP -> touched = true
-            MotionEvent.ACTION_CANCEL -> touched = false
-            MotionEvent.ACTION_OUTSIDE -> touched = false
+        // Map
+        map = TitleMap(map_bitmaps)
+
+        // Bad Apple
+        badApples = emptyArray()
+        for (i in 0..MAX_BAD_APPLES_ON_SCREEN-1){
+            badApples += BadApple(
+                badapple_bitmaps,
+                player!!,
+                i,
+                MAX_BAD_APPLES_ON_SCREEN
+            )
         }
-        return true
+
+        // Bonus Apple
+        bonusApples = emptyArray()
+        for (i in 0..MAX_BONUS_APPLES_ON_SCREEN-1){
+            bonusApples += BonusApple(
+                bonusapple_bitmaps,
+                player!!,
+                i,
+                MAX_BONUS_APPLES_ON_SCREEN
+            )
+        }
+
+        // Barrier
+        barriers = emptyArray()
+        for (i in 0..MAX_BARRIERS_ON_SCREEN-1){
+            barriers += Barrier(
+                barrier_bitmaps,
+                player!!,
+                i,
+                MAX_BARRIERS_ON_SCREEN
+            )
+        }
+
+        // Ghost
+        ghosts = emptyArray()
+        for (i in 0..MAX_GHOSTS_ON_SCREEN-1){
+            ghosts += Ghost(
+                ghost_bitmaps,
+                player!!,
+                (20..30).random().toFloat()
+            )
+        }
     }
 
-    fun updateIfTouched(){
-        if(touched){
-            player!!.updateTouch(touched_x, touched_y)
-        }
-    }
-
-    fun onPause(){
-        thread.stopLoop()
+    fun over(): Boolean{
+        return gameOver
     }
 
     fun createBitmaps(){
@@ -204,7 +240,15 @@ class GameView(context: Context, attributes: AttributeSet): SurfaceView(context,
             BitmapFactory.decodeResource(resources, R.drawable.barrier_1),
             BitmapFactory.decodeResource(resources, R.drawable.barrier_2),
             BitmapFactory.decodeResource(resources, R.drawable.barrier_3),
-            BitmapFactory.decodeResource(resources, R.drawable.barrier_4)
+            BitmapFactory.decodeResource(resources, R.drawable.barrier_4),
+            BitmapFactory.decodeResource(resources, R.drawable.barrier_5),
+            BitmapFactory.decodeResource(resources, R.drawable.barrier_6),
+            BitmapFactory.decodeResource(resources, R.drawable.barrier_7),
+            BitmapFactory.decodeResource(resources, R.drawable.barrier_8),
+            BitmapFactory.decodeResource(resources, R.drawable.barrier_9),
+            BitmapFactory.decodeResource(resources, R.drawable.barrier_10),
+            BitmapFactory.decodeResource(resources, R.drawable.barrier_11),
+            BitmapFactory.decodeResource(resources, R.drawable.barrier_12)
         )
 
         ghost_bitmaps = arrayOf(
@@ -216,18 +260,30 @@ class GameView(context: Context, attributes: AttributeSet): SurfaceView(context,
             BitmapFactory.decodeResource(resources, R.drawable.ghost_5),
             BitmapFactory.decodeResource(resources, R.drawable.ghost_6),
             BitmapFactory.decodeResource(resources, R.drawable.ghost_7)
+        )
+        badapple_bitmaps = arrayOf(
+            BitmapFactory.decodeResource(resources, R.drawable.badapple_0),
+            BitmapFactory.decodeResource(resources, R.drawable.badapple_1),
+            BitmapFactory.decodeResource(resources, R.drawable.badapple_2),
+            BitmapFactory.decodeResource(resources, R.drawable.badapple_3),
+            BitmapFactory.decodeResource(resources, R.drawable.badapple_4),
+            BitmapFactory.decodeResource(resources, R.drawable.badapple_5),
+            BitmapFactory.decodeResource(resources, R.drawable.badapple_6),
+            BitmapFactory.decodeResource(resources, R.drawable.badapple_7),
+            BitmapFactory.decodeResource(resources, R.drawable.badapple_8),
+            BitmapFactory.decodeResource(resources, R.drawable.badapple_9),
+            BitmapFactory.decodeResource(resources, R.drawable.badapple_10),
+            BitmapFactory.decodeResource(resources, R.drawable.badapple_11),
+            BitmapFactory.decodeResource(resources, R.drawable.badapple_12)
 
         )
-        map = BitmapFactory.decodeResource(resources, R.drawable.background)
+        bonusapple_bitmaps = arrayOf(
+            BitmapFactory.decodeResource(resources, R.drawable.apple_0)
+        )
+
+        map_bitmaps = arrayOf(
+            BitmapFactory.decodeResource(resources, R.drawable.background)
+        )
     }
-    private fun createMap(canvas: Canvas){
-        var map = BitmapFactory.decodeResource(resources, R.drawable.background)
-        var paint = Paint()
-        var dest = Rect(0, 0, getWidth(), getHeight());
-        paint.setFilterBitmap(true)
-        canvas.drawBitmap(map!!, null, dest, paint);
-    }
-    fun update_x_y(x: Int, y: Int){
-        player!!.updateTouch(x, y);
-    }
+
 }

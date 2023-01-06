@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<!--<?xml version="1.0" encoding="utf-8"?>-->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -9,18 +9,46 @@
   <com.example.frontcamgame.CameraSourcePreview
       android:id="@+id/preview_view"
       android:layout_width="match_parent"
-      android:layout_height="0dp"
+      android:layout_height="match_parent"
       app:layout_constraintTop_toTopOf="parent"
-      app:layout_constraintBottom_toTopOf="@+id/control"
-      android:visibility="invisible"/>
-
-  <com.example.frontcamgame.GameView
-      android:id= "@+id/game_view"
+  />
+  <RelativeLayout
       android:layout_width="match_parent"
-      android:layout_height="0dp"
-      app:layout_constraintTop_toTopOf="parent"
-      app:layout_constraintBottom_toTopOf="@+id/control"
-      ></com.example.frontcamgame.GameView>
+      android:layout_height="match_parent"
+
+      >
+    <com.example.frontcamgame.GameView
+        android:id= "@+id/game_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+    </com.example.frontcamgame.GameView>
+
+    <Button
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:text="Play again"
+        android:id = "@+id/playAgainBtn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="1300px"
+        android:background="@drawable/my_button_templates"
+        android:visibility="gone"
+        ></Button>
+
+    <Button
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:text="Home"
+        android:layout_below="@id/playAgainBtn"
+        android:layout_marginTop="50px"
+        android:id = "@+id/homeBtn"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/my_button_templates"
+        android:visibility="gone"
+        ></Button>
+  </RelativeLayout>
+
+
 
   <com.example.frontcamgame.GraphicOverlay
       android:id="@+id/graphic_overlay"
@@ -39,31 +67,31 @@
       app:layout_constraintRight_toRightOf="@id/preview_view"
       app:layout_constraintTop_toTopOf="@id/preview_view" />
 
-  <LinearLayout
-      android:id="@id/control"
-      android:layout_width="match_parent"
-      android:layout_height="60dp"
-      app:layout_constraintBottom_toBottomOf="parent"
-      android:background="#000"
-      android:orientation="horizontal">
+<!--  <LinearLayout-->
+<!--      android:id="@id/control"-->
+<!--      android:layout_width="match_parent"-->
+<!--      android:layout_height="60dp"-->
+<!--      app:layout_constraintBottom_toBottomOf="parent"-->
+<!--      android:background="#000"-->
+<!--      android:orientation="horizontal">-->
 
-    <ToggleButton
-        android:id="@+id/facing_switch"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_gravity="center_vertical"
-        android:background="@layout/toggle_style"
-        android:checked="false"
-        android:textOff=""
-        android:textOn=""/>
+<!--    <ToggleButton-->
+<!--        android:id="@+id/facing_switch"-->
+<!--        android:layout_width="48dp"-->
+<!--        android:layout_height="48dp"-->
+<!--        android:layout_gravity="center_vertical"-->
+<!--        android:background="@layout/toggle_style"-->
+<!--        android:checked="false"-->
+<!--        android:textOff=""-->
+<!--        android:textOn=""/>-->
 
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
+<!--    <Spinner-->
+<!--        android:id="@+id/spinner"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_weight="1"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="center"/>-->
 
-  </LinearLayout>
+<!--  </LinearLayout>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

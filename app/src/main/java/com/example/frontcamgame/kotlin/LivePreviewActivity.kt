@@ -24,11 +24,13 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.CompoundButton
 import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.Toast
 import android.widget.ToggleButton
+import androidx.appcompat.widget.ActivityChooserView
 import com.example.frontcamgame.*
 import com.google.android.gms.common.annotation.KeepName
 import com.example.frontcamgame.kotlin.facedetector.FaceDetectorProcessor
@@ -49,6 +51,9 @@ class LivePreviewActivity :
   private var selectedModel = FACE_DETECTION
   private var gameView: GameView? = null //
 
+  private var playAgainBtn: Button? = null
+  private var homeBtn: Button? = null
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     Log.d(TAG, "onCreate")
@@ -67,27 +72,36 @@ class LivePreviewActivity :
       Log.d(TAG, "graphicOverlay is null")
     }
 
-    val spinner = findViewById<Spinner>(R.id.spinner)
-    val options: MutableList<String> = ArrayList()
-    options.add(FACE_DETECTION)
-    // Creating adapter for spinner
-    val dataAdapter = ArrayAdapter(this, R.layout.spinner_style, options)
-
-    // Drop down layout style - list view with radio button
-    dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-    // attaching data adapter to spinner
-    spinner.adapter = dataAdapter
-    spinner.onItemSelectedListener = this
-
-    val facingSwitch = findViewById<ToggleButton>(R.id.facing_switch)
-    facingSwitch.setOnCheckedChangeListener(this)
-
-    val settingsButton = findViewById<ImageView>(R.id.settings_button)
-    settingsButton.setOnClickListener {
-      val intent = Intent(applicationContext, SettingsActivity::class.java)
-      intent.putExtra(SettingsActivity.EXTRA_LAUNCH_SOURCE, LaunchSource.LIVE_PREVIEW)
-      startActivity(intent)
+    playAgainBtn = findViewById(R.id.playAgainBtn)
+    playAgainBtn!!.setOnClickListener {
+      gameView!!.resetAll()
     }
+    homeBtn = findViewById(R.id.homeBtn)
+    homeBtn!!.setOnClickListener {
+
+    }
+
+//    val spinner = findViewById<Spinner>(R.id.spinner)
+//    val options: MutableList<String> = ArrayList()
+//    options.add(FACE_DETECTION)
+//    // Creating adapter for spinner
+//    val dataAdapter = ArrayAdapter(this, R.layout.spinner_style, options)
+//
+//    // Drop down layout style - list view with radio button
+//    dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//    // attaching data adapter to spinner
+//    spinner.adapter = dataAdapter
+//    spinner.onItemSelectedListener = this
+//
+//    val facingSwitch = findViewById<ToggleButton>(R.id.facing_switch)
+//    facingSwitch.setOnCheckedChangeListener(this)
+
+//    val settingsButton = findViewById<ImageView>(R.id.settings_button)
+//    settingsButton.setOnClickListener {
+//      val intent = Intent(applicationContext, SettingsActivity::class.java)
+//      intent.putExtra(SettingsActivity.EXTRA_LAUNCH_SOURCE, LaunchSource.LIVE_PREVIEW)
+//      startActivity(intent)
+//    }
 
     //createCameraSource(selectedModel)
   }
@@ -109,13 +123,14 @@ class LivePreviewActivity :
 
   override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {
     Log.d(TAG, "Set facing")
-    if (cameraSource != null) {
-      if (isChecked) {
-        cameraSource?.setFacing(CameraSource.CAMERA_FACING_FRONT)
-      } else {
-        cameraSource?.setFacing(CameraSource.CAMERA_FACING_BACK)
-      }
-    }
+//    if (cameraSource != null) {
+//      if (isChecked) {
+//        cameraSource?.setFacing(CameraSource.CAMERA_FACING_FRONT)
+//      } else {
+//        cameraSource?.setFacing(CameraSource.CAMERA_FACING_BACK)
+//      }
+//    }
+
     preview?.stop()
     startCameraSource()
   }
@@ -132,11 +147,9 @@ class LivePreviewActivity :
 
           Log.i(TAG, "Using Face Detector Processor")
           val faceDetectorOptions = PreferenceUtils.getFaceDetectorOptions(this)
-          val faceDetectorProcessor = FaceDetectorProcessor(this, faceDetectorOptions, gameView)
           cameraSource!!.setMachineLearningFrameProcessor(
-            faceDetectorProcessor
+            FaceDetectorProcessor(this, faceDetectorOptions, gameView)
           )
-
         }
 
         else -> Log.e(TAG, "Unknown model: $model")
