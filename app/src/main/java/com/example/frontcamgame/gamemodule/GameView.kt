@@ -22,7 +22,7 @@ class GameView(context: Context,
                attributes: AttributeSet):
     SurfaceView(context, attributes), SurfaceHolder.Callback{
 
-    private var thread: GameThread
+    var thread: GameThread
 
     // Bitmap
     private final val MAX_BARRIERS_ON_SCREEN = 3;

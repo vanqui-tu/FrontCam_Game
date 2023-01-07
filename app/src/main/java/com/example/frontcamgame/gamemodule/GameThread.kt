@@ -85,7 +85,11 @@ class GameThread(private val surfaceHolder: SurfaceHolder,
         }
     }
 
-    companion object {
-        private var canvas: Canvas? = null
+    fun getCanvas() : Canvas? {
+        return canvas;
+    }
+
+    companion object MyCompanionObject{
+        var canvas: Canvas? = null
     }
 }

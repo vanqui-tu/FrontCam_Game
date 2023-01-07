@@ -16,7 +16,10 @@
 
 package com.example.frontcamgame.kotlin
 
+import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
@@ -28,7 +31,10 @@ import android.widget.CompoundButton
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.Toast
+import androidx.core.graphics.get
+import androidx.core.view.drawToBitmap
 import com.example.frontcamgame.*
+import com.example.frontcamgame.R
 import com.example.frontcamgame.gamemodule.GameView
 import com.google.android.gms.common.annotation.KeepName
 import com.example.frontcamgame.kotlin.facedetector.FaceDetectorProcessor
@@ -44,6 +50,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.jraska.falcon.Falcon
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
@@ -67,6 +74,7 @@ class LivePreviewActivity :
 
   private lateinit var db: FirebaseFirestore
   private lateinit var auth: FirebaseAuth
+  private var canvas: Canvas? = null
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -75,6 +83,7 @@ class LivePreviewActivity :
 
     db = Firebase.firestore
     auth = Firebase.auth
+
 
     preview = findViewById(R.id.preview_view) //
 
@@ -108,9 +117,11 @@ class LivePreviewActivity :
     }
 
     shareBtn = findViewById(R.id.shareResult)
-    shareBtn!!.setOnClickListener{
-      screen_share()
-    }
+    shareBtn!!.setOnClickListener{ runBlocking {
+      launch {
+        screen_share()
+      }
+    }}
     gameView!!.getViews(gameOverView)
     gameView!!.gameover_callback = ::callback
   }
@@ -228,6 +239,7 @@ class LivePreviewActivity :
   }
 
 
+
   private fun check_auth(): Boolean {
     return auth.currentUser != null
   }
@@ -283,21 +295,26 @@ class LivePreviewActivity :
 
   }
 
-  private fun screen_share() {
-    val screenshot: Bitmap = takeScreenshotOfView()
-    var sharePhoto: SharePhoto = SharePhoto.Builder().setBitmap(screenshot).setCaption("Caption").build()
+  private suspend fun screen_share() {
+    var res = gameView!!.drawToBitmap()
+    //var res2 = gameOverView!!.drawToBitmap()
+    //var tmpcanvas = Canvas(res2)
+    //tmpcanvas.drawBitmap(res, 0F, 0F, Paint())
+    //var res = Falcon.takeScreenshotBitmap(this@LivePreviewActivity)
+
+    var sharePhoto: SharePhoto = SharePhoto.Builder().setBitmap(res).setCaption("Caption").build()
     var shareHashtag: ShareHashtag = ShareHashtag.Builder().setHashtag("hashtag").build()
     var photoContent: SharePhotoContent = SharePhotoContent.Builder().addPhoto(sharePhoto).setShareHashtag(shareHashtag).build()
-    var dialog: ShareDialog = ShareDialog(this)
+    var dialog: ShareDialog = ShareDialog(this@LivePreviewActivity)
     dialog.show(photoContent, ShareDialog.Mode.AUTOMATIC)
   }
 
-  fun takeScreenshotOfView(): Bitmap {
-    var v1: View = window.decorView.rootView
-    v1.isDrawingCacheEnabled = true
-    var res: Bitmap = Bitmap.createBitmap(v1.drawingCache)
-    v1.isDrawingCacheEnabled = false
-    return res
+  fun takeScreenshotOfView(): Bitmap? {
+//    var v1: View = window.decorView.rootView
+//    v1.isDrawingCacheEnabled = true
+//    var res: Bitmap = Bitmap.createBitmap(v1.drawingCache)
+//    v1.isDrawingCacheEnabled = false
+    return null
   }
 
   companion object {
