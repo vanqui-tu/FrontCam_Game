@@ -21,6 +21,10 @@ import androidx.core.content.ContextCompat
 import coil.ImageLoader
 import coil.request.ImageRequest
 import coil.request.SuccessResult
+import com.facebook.AccessToken
+import com.facebook.FacebookSdk
+import com.facebook.Profile
+import com.facebook.login.LoginManager
 import com.facebook.share.internal.ShareDialogFeature
 import com.facebook.share.internal.ShareFeedContent
 import com.facebook.share.model.*
@@ -62,6 +66,9 @@ class home : AppCompatActivity() {
         val logout_btn = findViewById<Button>(R.id.home_logout)
         logout_btn.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
+            if (AccessToken.getCurrentAccessToken() != null && Profile.getCurrentProfile() != null) {
+                LoginManager.getInstance().logOut()
+            }
             finish()
         }
 
@@ -73,7 +80,7 @@ class home : AppCompatActivity() {
 
         val play_btn = findViewById<Button>(R.id.home_gamescr_btn)
         play_btn.setOnClickListener {
-            var intent: Intent = Intent(this@home, com.example.frontcamgame.kotlin.LivePreviewActivity::class.java)
+            var intent: Intent = Intent(this@home, game::class.java)
             startActivity(intent)
         }
     }
