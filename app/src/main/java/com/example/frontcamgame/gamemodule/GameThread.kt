@@ -1,10 +1,11 @@
-package com.example.frontcamgame
+package com.example.frontcamgame.gamemodule
 
 import android.graphics.Canvas
 import android.view.SurfaceHolder
 
 class GameThread(private val surfaceHolder: SurfaceHolder,
-                 private val gameView: GameView): Thread()  {
+                 private val gameView: GameView
+): Thread()  {
     private var isRunning: Boolean = false
     private val FPS = 30
     private var avgFPS =  0.0
@@ -65,6 +66,8 @@ class GameThread(private val surfaceHolder: SurfaceHolder,
 
             timeMillis = (System.nanoTime() - startTime) / 1000000
             waitTime = targetTime - timeMillis
+            if (waitTime < 0)
+                waitTime = - waitTime
 
             try {
                 sleep(waitTime)

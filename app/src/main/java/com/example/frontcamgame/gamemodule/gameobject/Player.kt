@@ -2,8 +2,7 @@ package com.example.mygame.gameobject
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.util.Log
-import com.example.frontcamgame.gamepanel.Score
+import com.example.frontcamgame.gamemodule.gamepanel.Score
 import com.example.mygame.gamepanel.GameOver
 import com.example.mygame.gamepanel.HealthBar
 

@@ -1,4 +1,4 @@
-package com.example.frontcamgame.gamemap
+package com.example.frontcamgame.gamemodule.gamemap
 
 import android.graphics.Bitmap
 import android.graphics.Canvas

@@ -1,7 +1,7 @@
 package com.example.mygame.gameobject
 
 import android.graphics.Bitmap
-import com.example.frontcamgame.gameobject.EffectObject
+import com.example.frontcamgame.gamemodule.gameobject.EffectObject
 
 class Ghost(bitmap: Array<Bitmap>,
             player: Player,

@@ -75,36 +75,30 @@
             android:authorities="com.facebook.app.FacebookContentProvider1243932759522988"
             android:exported="true" />
 
+
         <activity
-            android:name=".game"
+            android:name=".pages.scoreboard"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".scoreboard"
+            android:name=".pages.signup"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".signup"
+            android:name=".pages.home"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".home"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".signin"
+            android:name=".pages.signin"
             android:exported="true">
         <meta-data
             android:name="android.app.lib_name"

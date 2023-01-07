@@ -14,12 +14,12 @@
       app:layout_constraintTop_toTopOf="parent"
   />
 
-  <com.example.frontcamgame.GameView
+  <com.example.frontcamgame.gamemodule.GameView
       android:id= "@+id/game_view"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       >
-  </com.example.frontcamgame.GameView>
+  </com.example.frontcamgame.gamemodule.GameView>
 
   <com.example.frontcamgame.GraphicOverlay
       android:id="@+id/graphic_overlay"
@@ -35,7 +35,7 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:id="@+id/game_over_layout"
-      android:visibility="gone"
+      android:visibility="invisible"
       >
 
     <Button

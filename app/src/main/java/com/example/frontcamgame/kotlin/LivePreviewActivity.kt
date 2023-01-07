@@ -16,29 +16,25 @@
 
 package com.example.frontcamgame.kotlin
 
-import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.text.Layout
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
-import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.CompoundButton
 import android.widget.ImageView
-import android.widget.Spinner
+import android.widget.RelativeLayout
 import android.widget.Toast
-import android.widget.ToggleButton
-import androidx.appcompat.widget.ActivityChooserView
 import com.example.frontcamgame.*
+import com.example.frontcamgame.gamemodule.GameView
 import com.google.android.gms.common.annotation.KeepName
 import com.example.frontcamgame.kotlin.facedetector.FaceDetectorProcessor
+import com.example.frontcamgame.models.Attempt
+import com.example.frontcamgame.models.getAttempt
 import com.example.frontcamgame.preference.PreferenceUtils
-import com.example.frontcamgame.preference.SettingsActivity
-import com.example.frontcamgame.preference.SettingsActivity.LaunchSource
 import com.facebook.share.model.ShareHashtag
 import com.facebook.share.model.SharePhoto
 import com.facebook.share.model.SharePhotoContent
@@ -52,7 +48,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 import java.io.IOException
-import java.util.ArrayList
 
 /** Live preview demo for ML Kit APIs. */
 @KeepName
@@ -68,7 +63,7 @@ class LivePreviewActivity :
   private var playAgainBtn: Button? = null
   private var homeBtn: Button? = null
   private var shareBtn: ImageView? = null
-  private var gameOverView: View? = null
+  private var gameOverView: RelativeLayout? = null
 
   private lateinit var db: FirebaseFirestore
   private lateinit var auth: FirebaseAuth
@@ -94,40 +89,43 @@ class LivePreviewActivity :
     }
 
 
+    gameOverView = findViewById<RelativeLayout>(R.id.game_over_layout)
     playAgainBtn = findViewById(R.id.playAgainBtn)
     playAgainBtn!!.setOnClickListener {
       gameView!!.resetAll()
-      gameOverView!!.visibility = if (gameOverView!!.visibility == View.GONE)
+      gameOverView!!.visibility = if (gameOverView!!.visibility == View.INVISIBLE)
                                   View.VISIBLE
-                                  else View.GONE
+                                  else View.INVISIBLE
     }
 
     homeBtn = findViewById(R.id.homeBtn)
     homeBtn!!.setOnClickListener {
       // intent to home
       finish()
-      gameOverView!!.visibility = if (gameOverView!!.visibility == View.GONE)
+      gameOverView!!.visibility = if (gameOverView!!.visibility == View.INVISIBLE)
                                     View.VISIBLE
-                                    else View.GONE
+                                    else View.INVISIBLE
     }
 
     shareBtn = findViewById(R.id.shareResult)
     shareBtn!!.setOnClickListener{
       screen_share()
     }
-
-    gameOverView = findViewById(R.id.game_over_layout)
-    gameView!!.getViews(gameOverView!!)
-    gameView!!.callback = ::callback
+    gameView!!.getViews(gameOverView)
+    gameView!!.gameover_callback = ::callback
   }
 
   fun callback() {
     runBlocking {
       launch {
         add_score()
-        Log.d("Add score", "123")
       }
     }
+
+    gameOverView!!.visibility = if (gameOverView!!.visibility != View.VISIBLE) View.VISIBLE else View.INVISIBLE
+    gameOverView!!.bringToFront()
+
+
   }
 
   @Synchronized
@@ -250,6 +248,8 @@ class LivePreviewActivity :
   }
 
   private suspend fun add_score() {
+    Log.d("Add score", "123")
+
     var score = gameView!!.getPlayScore()
     if (score <= 0)
       return

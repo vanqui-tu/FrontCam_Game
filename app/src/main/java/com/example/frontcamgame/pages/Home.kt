@@ -1,51 +1,26 @@
-package com.example.frontcamgame
+package com.example.frontcamgame.pages
 
 import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.drawable.BitmapDrawable
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import coil.ImageLoader
-import coil.request.ImageRequest
-import coil.request.SuccessResult
+import com.example.frontcamgame.R
 import com.facebook.AccessToken
-import com.facebook.FacebookSdk
 import com.facebook.Profile
 import com.facebook.login.LoginManager
-import com.facebook.share.internal.ShareDialogFeature
-import com.facebook.share.internal.ShareFeedContent
-import com.facebook.share.model.*
-import com.facebook.share.widget.ShareButton
-import com.facebook.share.widget.ShareDialog
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.ktx.app
-import com.google.type.Date
-import com.google.type.DateTime
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.util.ArrayList
-import java.util.concurrent.Future
 
 class home : AppCompatActivity() {
     private lateinit var db: FirebaseFirestore
@@ -80,7 +55,7 @@ class home : AppCompatActivity() {
 
         val play_btn = findViewById<Button>(R.id.home_gamescr_btn)
         play_btn.setOnClickListener {
-            var intent: Intent = Intent(this@home, game::class.java)
+            var intent: Intent = Intent(this@home, com.example.frontcamgame.kotlin.LivePreviewActivity::class.java)
             startActivity(intent)
         }
     }

@@ -1,24 +1,20 @@
-package com.example.frontcamgame
+package com.example.frontcamgame.gamemodule
 
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.util.Log
-import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import android.view.View
-import android.widget.Button
-import android.widget.TextView
-import com.example.frontcamgame.gamemap.TitleMap
-import com.example.frontcamgame.gameobject.BadApple
-import com.example.frontcamgame.gameobject.BonusApple
+import android.widget.RelativeLayout
+import com.example.frontcamgame.R
+import com.example.frontcamgame.gamemodule.gamemap.TitleMap
+import com.example.frontcamgame.gamemodule.gameobject.BadApple
+import com.example.frontcamgame.gamemodule.gameobject.BonusApple
 import com.example.mygame.gameobject.Barrier
 import com.example.mygame.gameobject.Ghost
 import com.example.mygame.gameobject.Player
-import com.example.mygame.gamepanel.GameOver
 import com.example.mygame.gamepanel.Perfomance
-import kotlinx.android.synthetic.main.activity_vision_live_preview.view.*
 import kotlin.properties.Delegates
 
 class GameView(context: Context,
@@ -52,15 +48,16 @@ class GameView(context: Context,
     private var perfomance: Perfomance? = null
     private var gameOver: Boolean by Delegates.observable(false) { property, old, new ->
         if (new == true && old != new)
-            callback()
+            gameover_callback()
     }
 
-    private final var gameOverView: View? = null
+    private final var gameOverView: RelativeLayout? = null
 
-    fun getViews(view: View) {
-        gameOverView = view
+    fun getViews(relativeLayout: RelativeLayout?) {
+        gameOverView = relativeLayout
     }
-    lateinit var callback: () -> Unit
+
+    lateinit var gameover_callback: () -> Unit
     init{
         // add callback
         holder.addCallback(this)
@@ -96,9 +93,6 @@ class GameView(context: Context,
 
     fun update(){
         if(player!!.getHealthPercentage() == 0){
-            gameOverView!!.visibility = if (gameOverView!!.visibility == View.INVISIBLE)
-                                    View.VISIBLE
-                                    else View.INVISIBLE
             gameOverView!!.bringToFront()
             gameOver = true
             return
@@ -125,33 +119,34 @@ class GameView(context: Context,
     }
 
     override fun draw(canvas: Canvas){
-        super.draw(canvas)
+
         // cái nào vẽ trc thì nằm ở dưới
+            super.draw(canvas)
+            map!!.draw(canvas)
 
-        map!!.draw(canvas)
+            // Draw BadApples
+            for(i in 0 .. MAX_BAD_APPLES_ON_SCREEN-1)
+                badApples[i].draw(canvas)
 
-        // Draw BadApples
-        for(i in 0 .. MAX_BAD_APPLES_ON_SCREEN-1)
-            badApples[i].draw(canvas)
+            // draw BonusApples
+            for(i in 0 .. MAX_BONUS_APPLES_ON_SCREEN-1)
+                bonusApples[i].draw(canvas)
 
-        // draw BonusApples
-        for(i in 0 .. MAX_BONUS_APPLES_ON_SCREEN-1)
-            bonusApples[i].draw(canvas)
+            // Draw barriers
+            for(i in 0..MAX_BARRIERS_ON_SCREEN-1){
+                barriers[i].draw(canvas)
+            }
 
-        // Draw barriers
-        for(i in 0..MAX_BARRIERS_ON_SCREEN-1){
-            barriers[i].draw(canvas)
-        }
+            // Draw barriers
+            for(i in 0..MAX_GHOSTS_ON_SCREEN-1){
+                ghosts[i].draw(canvas)
+            }
 
-        // Draw barriers
-        for(i in 0..MAX_GHOSTS_ON_SCREEN-1){
-            ghosts[i].draw(canvas)
-        }
+            perfomance!!.draw(canvas)
 
-        perfomance!!.draw(canvas)
+            // Draw player (main character)
+            player!!.draw(canvas)
 
-        // Draw player (main character)
-        player!!.draw(canvas)
     }
 
      fun onPause(){

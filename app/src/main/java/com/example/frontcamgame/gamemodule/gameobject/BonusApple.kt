@@ -1,4 +1,4 @@
-package com.example.frontcamgame.gameobject
+package com.example.frontcamgame.gamemodule.gameobject
 
 import android.graphics.Bitmap
 import com.example.mygame.gameobject.Player

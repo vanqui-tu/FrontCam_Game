@@ -1,16 +1,14 @@
-package com.example.frontcamgame
+package com.example.frontcamgame.models
 
-import android.content.ContentResolver
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
-import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.frontcamgame.models.Attempt
+import com.example.frontcamgame.R
 import com.squareup.picasso.Picasso
 
 class RVAdapter(private val data: List<Attempt>) : RecyclerView.Adapter<RVAdapter.ViewHolder>() {

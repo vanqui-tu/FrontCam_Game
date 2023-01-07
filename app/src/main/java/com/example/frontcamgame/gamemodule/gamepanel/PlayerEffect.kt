@@ -1,4 +1,4 @@
-package com.example.frontcamgame.gamepanel
+package com.example.frontcamgame.gamemodule.gamepanel
 
 import android.graphics.Canvas
 import com.example.mygame.gameobject.Player

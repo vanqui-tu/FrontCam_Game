@@ -3,10 +3,8 @@ package com.example.mygame.gamepanel
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.util.Log
-import com.example.frontcamgame.gamepanel.PlayerEffect
+import com.example.frontcamgame.gamemodule.gamepanel.PlayerEffect
 import com.example.mygame.gameobject.Player
-import com.google.android.gms.common.internal.FallbackServiceBroker
 
 class HealthBar(player: Player): PlayerEffect(player){
     private var center_x: Float = 0F

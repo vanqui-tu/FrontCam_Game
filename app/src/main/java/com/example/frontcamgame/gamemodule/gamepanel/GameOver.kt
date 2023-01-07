@@ -1,13 +1,12 @@
 package com.example.mygame.gamepanel
 
-import android.content.Context
 import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import androidx.appcompat.app.AppCompatActivity
-import com.example.frontcamgame.gamepanel.Score
+import com.example.frontcamgame.gamemodule.gamepanel.Score
 
 class GameOver(score: Score): AppCompatActivity() {
     private var scorePlayer = score

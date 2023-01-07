@@ -1,7 +1,6 @@
-package com.example.frontcamgame.gameobject
+package com.example.frontcamgame.gamemodule.gameobject
 
 import android.graphics.Bitmap
-import android.graphics.Canvas
 import com.example.mygame.gameobject.Player
 import kotlin.random.Random
 

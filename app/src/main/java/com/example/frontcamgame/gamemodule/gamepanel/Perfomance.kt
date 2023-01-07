@@ -3,7 +3,7 @@ package com.example.mygame.gamepanel
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import com.example.frontcamgame.GameThread
+import com.example.frontcamgame.gamemodule.GameThread
 
 
 
