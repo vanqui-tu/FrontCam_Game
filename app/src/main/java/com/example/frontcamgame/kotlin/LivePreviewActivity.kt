@@ -53,6 +53,7 @@ class LivePreviewActivity :
 
   private var playAgainBtn: Button? = null
   private var homeBtn: Button? = null
+  private var shareBtn: ImageView? = null
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -76,35 +77,15 @@ class LivePreviewActivity :
     playAgainBtn!!.setOnClickListener {
       gameView!!.resetAll()
     }
+
     homeBtn = findViewById(R.id.homeBtn)
     homeBtn!!.setOnClickListener {
-
+    }
+    shareBtn = findViewById(R.id.shareResult)
+    shareBtn!!.setOnClickListener{
     }
     gameView!!.getButtons(playAgainBtn, homeBtn)
 
-//    val spinner = findViewById<Spinner>(R.id.spinner)
-//    val options: MutableList<String> = ArrayList()
-//    options.add(FACE_DETECTION)
-//    // Creating adapter for spinner
-//    val dataAdapter = ArrayAdapter(this, R.layout.spinner_style, options)
-//
-//    // Drop down layout style - list view with radio button
-//    dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-//    // attaching data adapter to spinner
-//    spinner.adapter = dataAdapter
-//    spinner.onItemSelectedListener = this
-//
-//    val facingSwitch = findViewById<ToggleButton>(R.id.facing_switch)
-//    facingSwitch.setOnCheckedChangeListener(this)
-
-//    val settingsButton = findViewById<ImageView>(R.id.settings_button)
-//    settingsButton.setOnClickListener {
-//      val intent = Intent(applicationContext, SettingsActivity::class.java)
-//      intent.putExtra(SettingsActivity.EXTRA_LAUNCH_SOURCE, LaunchSource.LIVE_PREVIEW)
-//      startActivity(intent)
-//    }
-
-    //createCameraSource(selectedModel)
   }
 
   @Synchronized
@@ -145,7 +126,6 @@ class LivePreviewActivity :
       when (model) {
 
         FACE_DETECTION -> {
-
           Log.i(TAG, "Using Face Detector Processor")
           val faceDetectorOptions = PreferenceUtils.getFaceDetectorOptions(this)
           cameraSource!!.setMachineLearningFrameProcessor(

@@ -15,12 +15,12 @@
   <RelativeLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-
       >
     <com.example.frontcamgame.GameView
         android:id= "@+id/game_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+
         >
     </com.example.frontcamgame.GameView>
 
@@ -32,7 +32,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="1300px"
         android:background="@drawable/my_button_templates"
-        android:visibility="invisible"
+        android:visibility="visible"
         ></Button>
 
     <Button
@@ -44,11 +44,9 @@
         android:id = "@+id/homeBtn"
         android:layout_centerHorizontal="true"
         android:background="@drawable/my_button_templates"
-        android:visibility="invisible"
+        android:visibility="visible"
         ></Button>
   </RelativeLayout>
-
-
 
   <com.example.frontcamgame.GraphicOverlay
       android:id="@+id/graphic_overlay"
@@ -59,13 +57,25 @@
       app:layout_constraintTop_toTopOf="@id/preview_view"
       app:layout_constraintBottom_toBottomOf="@id/preview_view"/>
 
-  <include
-      android:id="@+id/settings_button"
-      layout="@layout/settings_style"
+  <ImageView
+      android:id = "@+id/shareResult"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:src = "@drawable/ic_baseline_share_24"
+      app:layout_constraintBottom_toBottomOf="@id/preview_view"
       app:layout_constraintRight_toRightOf="@id/preview_view"
-      app:layout_constraintTop_toTopOf="@id/preview_view" />
+      android:layout_marginRight="20dp"
+      android:layout_marginBottom="20dp"
+      android:onClick= ""
+      ></ImageView>
+  <!--  <include-->
+  <!--      android:id="@+id/settings_button"-->
+  <!--      layout="@layout/settings_style"-->
+  <!--      android:layout_width="wrap_content"-->
+  <!--      android:layout_height="wrap_content"-->
+  <!--      app:layout_constraintRight_toRightOf="@id/preview_view"-->
+  <!--      app:layout_constraintTop_toTopOf="@id/preview_view" />-->
+
 
 <!--  <LinearLayout-->
 <!--      android:id="@id/control"-->

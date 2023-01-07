@@ -19,7 +19,10 @@ import com.example.mygame.gamepanel.GameOver
 import com.example.mygame.gamepanel.Perfomance
 import kotlinx.android.synthetic.main.activity_vision_live_preview.view.*
 
-class GameView(context: Context, attributes: AttributeSet): SurfaceView(context, attributes), SurfaceHolder.Callback{
+class GameView(context: Context,
+               attributes: AttributeSet):
+    SurfaceView(context, attributes), SurfaceHolder.Callback{
+
     private var thread: GameThread
 
     // Bitmap
@@ -118,6 +121,7 @@ class GameView(context: Context, attributes: AttributeSet): SurfaceView(context,
         // Update Ghosts
         for(i in 0 .. MAX_GHOSTS_ON_SCREEN-1)
             ghosts[i].update()
+
         // Update Player
         player!!.update()
     }
@@ -150,8 +154,8 @@ class GameView(context: Context, attributes: AttributeSet): SurfaceView(context,
 
         // Draw player (main character)
         player!!.draw(canvas)
-
     }
+
      fun onPause(){
          thread.stopLoop()
      }
@@ -223,6 +227,10 @@ class GameView(context: Context, attributes: AttributeSet): SurfaceView(context,
 
     fun over(): Boolean{
         return gameOver
+    }
+
+    fun getPlayScore(): Int{
+        return player!!.getScore()
     }
 
     fun createBitmaps(){
