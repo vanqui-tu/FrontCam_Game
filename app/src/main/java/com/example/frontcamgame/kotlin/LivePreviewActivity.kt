@@ -80,6 +80,7 @@ class LivePreviewActivity :
     homeBtn!!.setOnClickListener {
 
     }
+    gameView!!.getButtons(playAgainBtn, homeBtn)
 
 //    val spinner = findViewById<Spinner>(R.id.spinner)
 //    val options: MutableList<String> = ArrayList()

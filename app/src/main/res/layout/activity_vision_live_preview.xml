@@ -32,7 +32,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="1300px"
         android:background="@drawable/my_button_templates"
-        android:visibility="gone"
+        android:visibility="invisible"
         ></Button>
 
     <Button
@@ -44,7 +44,7 @@
         android:id = "@+id/homeBtn"
         android:layout_centerHorizontal="true"
         android:background="@drawable/my_button_templates"
-        android:visibility="gone"
+        android:visibility="invisible"
         ></Button>
   </RelativeLayout>
 

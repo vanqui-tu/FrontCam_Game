@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import android.view.View
 import android.widget.Button
 import com.example.frontcamgame.gamemap.TitleMap
 import com.example.frontcamgame.gameobject.BadApple
@@ -46,6 +47,14 @@ class GameView(context: Context, attributes: AttributeSet): SurfaceView(context,
     private var perfomance: Perfomance? = null
     private var gameOver = false
 
+    private final var againButton : Button? = null
+    private final var homeButton : Button? = null
+
+    fun getButtons(again: Button?, home: Button?) {
+        againButton = again
+        homeButton = home
+    }
+
     init{
         // add callback
         holder.addCallback(this)
@@ -82,6 +91,14 @@ class GameView(context: Context, attributes: AttributeSet): SurfaceView(context,
 
     fun update(){
         if(player!!.getHealthPercentage() == 0){
+            if (againButton != null) {
+                againButton!!.visibility = View.VISIBLE
+                againButton!!.bringToFront()
+            }
+            if (homeButton != null) {
+                homeButton!!.visibility = View.VISIBLE
+                homeButton!!.bringToFront()
+            }
             gameOver = true
             return
         }
@@ -145,6 +162,13 @@ class GameView(context: Context, attributes: AttributeSet): SurfaceView(context,
 
     fun resetAll(){
         gameOver = false
+        if (againButton != null) {
+            againButton!!.visibility = (View.INVISIBLE)
+        }
+        if (homeButton != null) {
+            homeButton!!.visibility = (View.INVISIBLE)
+        }
+
         // GAME OBJECT
 
         // Player
