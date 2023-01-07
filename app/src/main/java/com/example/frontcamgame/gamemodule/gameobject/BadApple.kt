@@ -38,7 +38,7 @@ class BadApple(bitmap: Array<Bitmap>,
 
     private fun reset_X_Y(){
         y = -1 * (2..10).random() * h!!.toFloat()
-        x = ((index.toFloat() + Random.nextDouble(.3, .6)) *
+        x = ((index.toFloat() + Random.nextDouble(.1, .9)) *
                 screenWidth.toFloat()
                 / maxBadApple.toFloat()
                 ).toFloat()

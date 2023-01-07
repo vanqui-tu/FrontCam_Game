@@ -12,8 +12,9 @@ class GameOver(score: Score): AppCompatActivity() {
     private var scorePlayer = score
 
     private final var endGame:String = "Game Over"
-    private final var paint = Paint()
-
+    private final var paint0 = Paint()
+    private final var paint1 = Paint()
+    private final var paint2 = Paint()
     private  final var PAINT_BACKBROUND = Color.argb(150, 0,0,0)
     private final var GAMEOVER_COLOR = Color.RED
     private final var SCORE_COLOR = Color.WHITE
@@ -28,27 +29,28 @@ class GameOver(score: Score): AppCompatActivity() {
     private var dest = Rect(0, 0, screenWidth, screenHeight);
 
     init{
-        paint.textSize = PAINT_SCORE_SIZE
-        paint.setTextAlign(Paint.Align.CENTER)
-        paint.setFilterBitmap(true)
+        paint0.setColor(PAINT_BACKBROUND)
+
+        paint1.textSize = PAINT_SCORE_SIZE
+        paint1.setColor(SCORE_COLOR)
+        paint1.setTextAlign(Paint.Align.CENTER)
+        paint1.setFilterBitmap(true)
+
+        paint2.textSize = PAINT_GAMEOVER_SIZE
+        paint2.setColor(GAMEOVER_COLOR)
+        paint2.setTextAlign(Paint.Align.CENTER)
+        paint2.setFilterBitmap(true)
     }
 
     fun draw(canvas: Canvas){
         val locationX =
             canvas.width.toFloat() / 2
         val locationY =
-            canvas.height / 2 - (paint.descent() + paint.ascent())/2
-
-        paint.setColor(PAINT_BACKBROUND)
-        canvas.drawRect(dest, paint)
-
-        paint.setColor(SCORE_COLOR)
+            canvas.height / 2 - (paint1.descent() + paint1.ascent())/2
+        canvas.drawRect(dest, paint0)
         canvas.drawText("Your score: " + scorePlayer.getScore(),
-            locationX, locationY - locationY / 2, paint)
-
-        paint.setColor(GAMEOVER_COLOR)
-        paint.textSize = PAINT_GAMEOVER_SIZE
-        canvas.drawText(endGame, locationX, locationY, paint)
+            locationX, locationY - locationY / 2, paint1)
+        canvas.drawText(endGame, locationX, locationY, paint2)
     }
 
 
