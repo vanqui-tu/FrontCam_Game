@@ -121,11 +121,9 @@ class LivePreviewActivity :
         add_score()
       }
     }
-
-    gameOverView!!.visibility = if (gameOverView!!.visibility != View.VISIBLE) View.VISIBLE else View.INVISIBLE
-    gameOverView!!.bringToFront()
-
-
+    gameOverView!!.visibility = if (gameOverView!!.visibility != View.VISIBLE)
+                                  View.VISIBLE
+                                else View.INVISIBLE
   }
 
   @Synchronized

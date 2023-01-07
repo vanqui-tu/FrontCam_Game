@@ -6,7 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    tools:context=".pages.home">
+    tools:context=".pages.home"
+    android:background="@drawable/homepage"
+    >
 
     <LinearLayout
         android:id="@+id/home_ll1"
@@ -19,20 +21,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-
         <TextView
             android:id="@+id/textView8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="GAME TITLE"
+            android:text="Survival game"
             android:textAppearance="@style/TextAppearance.AppCompat.Display2"
-            android:textColor="@color/black"
-            android:textStyle="bold" />
+            android:textColor="@color/white"
+            android:textStyle="bold"
+
+            />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            >
 
             <TextView
                 android:id="@+id/textView"
@@ -40,7 +46,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
                 android:text="Signed in as"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                android:textColor="@color/white"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                />
 
             <TextView
                 android:id="@+id/home_email"
@@ -48,7 +56,9 @@
                 android:layout_height="wrap_content"
                 android:paddingStart="10dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textStyle="bold|italic" />
+                android:textStyle="bold|italic"
+                android:textColor="@color/white"
+                />
         </LinearLayout>
 
     </LinearLayout>
@@ -64,15 +74,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/home_ll1"
         android:layout_marginHorizontal="16dp"
-        android:gravity="center">
+        android:gravity="center"
+
+        >
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/home_gamescr_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Play"
-            android:textColor="@color/white"
-            android:background="@drawable/btn_black_rounded"
+            android:textColor="@color/red"
+            android:textStyle="bold"
+            android:background="@drawable/btn_home_rounded"
             android:layout_marginVertical="10dp"/>
 
         <androidx.appcompat.widget.AppCompatButton
@@ -80,8 +93,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="See highscores"
-            android:textColor="@color/white"
-            android:background="@drawable/btn_black_rounded"
+            android:textColor="@color/red"
+            android:textStyle="bold"
+            android:background="@drawable/btn_home_rounded"
             android:layout_marginVertical="10dp"/>
 
         <androidx.appcompat.widget.AppCompatButton
@@ -89,9 +103,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="log out"
-            android:textColor="@color/white"
+            android:textColor="@color/red"
+            android:textStyle="bold"
             android:gravity="center"
-            android:background="@drawable/btn_black_rounded"
+            android:background="@drawable/btn_home_rounded"
             android:layout_marginVertical="10dp"/>
     </LinearLayout>
 

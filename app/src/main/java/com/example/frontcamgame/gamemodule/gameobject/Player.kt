@@ -18,7 +18,6 @@ class Player(bitmap: Array<Bitmap>): GameObject(bitmap) {
     private var score = INITIAL_SCORE
     private var scorePlayer: Score? = Score(this)
     private var gameOver: GameOver? = GameOver(scorePlayer!!)
-
     private var SPEED = 2
 
     init {
@@ -40,12 +39,10 @@ class Player(bitmap: Array<Bitmap>): GameObject(bitmap) {
     }
 
     override fun draw(canvas: Canvas) {
-
         if(health > 0) {
+            super.draw(canvas)
             scorePlayer!!.draw(canvas)
             healthBar!!.draw(canvas)
-
-            super.draw(canvas)
         }
         else{
             gameOver!!.draw(canvas)

@@ -15,6 +15,7 @@ import com.example.mygame.gameobject.Barrier
 import com.example.mygame.gameobject.Ghost
 import com.example.mygame.gameobject.Player
 import com.example.mygame.gamepanel.Perfomance
+import kotlinx.android.synthetic.main.activity_vision_live_preview.view.*
 import kotlin.properties.Delegates
 
 class GameView(context: Context,
@@ -116,39 +117,42 @@ class GameView(context: Context,
 
         // Update Player
         player!!.update()
+
+        if(player!!.getHealthPercentage() == 0){
+            gameOverView!!.bringToFront()
+            gameOver = true
+        }
     }
 
     override fun draw(canvas: Canvas){
 
         // cái nào vẽ trc thì nằm ở dưới
-            super.draw(canvas)
-            map!!.draw(canvas)
+        super.draw(canvas)
+        map!!.draw(canvas)
 
-            // Draw BadApples
-            for(i in 0 .. MAX_BAD_APPLES_ON_SCREEN-1)
-                badApples[i].draw(canvas)
+        // Draw BadApples
+        for(i in 0 until MAX_BAD_APPLES_ON_SCREEN)
+            badApples[i].draw(canvas)
 
-            // draw BonusApples
-            for(i in 0 .. MAX_BONUS_APPLES_ON_SCREEN-1)
-                bonusApples[i].draw(canvas)
+        // draw BonusApples
+        for(i in 0 .. MAX_BONUS_APPLES_ON_SCREEN-1)
+            bonusApples[i].draw(canvas)
 
-            // Draw barriers
-            for(i in 0..MAX_BARRIERS_ON_SCREEN-1){
-                barriers[i].draw(canvas)
-            }
+        // Draw barriers
+        for(i in 0..MAX_BARRIERS_ON_SCREEN-1){
+            barriers[i].draw(canvas)
+        }
 
-            // Draw barriers
-            for(i in 0..MAX_GHOSTS_ON_SCREEN-1){
-                ghosts[i].draw(canvas)
-            }
+        // Draw barriers
+        for(i in 0..MAX_GHOSTS_ON_SCREEN-1){
+            ghosts[i].draw(canvas)
+        }
 
-            perfomance!!.draw(canvas)
+        perfomance!!.draw(canvas)
 
-            // Draw player (main character)
-            player!!.draw(canvas)
-
+        // Draw player (main character)
+        player!!.draw(canvas)
     }
-
      fun onPause(){
          thread.stopLoop()
      }
@@ -220,6 +224,7 @@ class GameView(context: Context,
     }
 
     fun createBitmaps(){
+
         player_bitmaps = arrayOf(
             BitmapFactory.decodeResource(resources, R.drawable.player_0),
             BitmapFactory.decodeResource(resources, R.drawable.player_1),
