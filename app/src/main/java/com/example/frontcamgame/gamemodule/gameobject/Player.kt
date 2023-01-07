@@ -1,14 +1,17 @@
 package com.example.mygame.gameobject
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.media.MediaPlayer
+import com.example.frontcamgame.R
 import com.example.frontcamgame.gamemodule.gamepanel.Score
 import com.example.mygame.gamepanel.GameOver
 import com.example.mygame.gamepanel.HealthBar
 
 // Main character
 
-class Player(bitmap: Array<Bitmap>): GameObject(bitmap) {
+class Player(bitmap: Array<Bitmap>, context: Context): GameObject(bitmap) {
     private final var MAX_HEALTH = 100
     private final val INITIAL_SCORE = 0.0
 
@@ -19,6 +22,10 @@ class Player(bitmap: Array<Bitmap>): GameObject(bitmap) {
     private var scorePlayer: Score? = Score(this)
     private var gameOver: GameOver? = GameOver(scorePlayer!!)
     private var SPEED = 2
+
+    private final var damagedSound : MediaPlayer = MediaPlayer.create(context, R.raw.explosion)
+    private final var bonusSound : MediaPlayer = MediaPlayer.create(context, R.raw.bonus)
+
 
     init {
         x = (screenWidth / 2).toFloat()
@@ -56,6 +63,7 @@ class Player(bitmap: Array<Bitmap>): GameObject(bitmap) {
 
     fun getDamaged(damage: Int){
         health = Math.max(Math.min(health - damage, 100), 0)
+        if (damage > 0) { damagedSound.start() }
     }
 
     fun getBonusScore(): Double{
@@ -70,6 +78,7 @@ class Player(bitmap: Array<Bitmap>): GameObject(bitmap) {
         score = bonus
         scorePlayer!!.update()
         score = 0.0
+        if (bonus > 0) { bonusSound.start() }
     }
 
 }

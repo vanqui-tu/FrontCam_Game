@@ -2,6 +2,7 @@ package com.example.frontcamgame.gamemodule
 
 import android.content.Context
 import android.graphics.*
+import android.media.MediaPlayer
 import android.util.AttributeSet
 import android.util.Log
 import android.view.SurfaceHolder
@@ -48,11 +49,13 @@ class GameView(context: Context,
 
     private var perfomance: Perfomance? = null
     private var gameOver: Boolean by Delegates.observable(false) { property, old, new ->
-        if (new == true && old != new)
+        if (new == true && old != new) {
             gameover_callback()
+        }
     }
 
     private final var gameOverView: RelativeLayout? = null
+    private final var gameOverSound = MediaPlayer.create(context, R.raw.gameover)
 
     fun getViews(relativeLayout: RelativeLayout?) {
         gameOverView = relativeLayout
@@ -95,6 +98,7 @@ class GameView(context: Context,
     fun update(){
         if(player!!.getHealthPercentage() == 0){
             gameOverView!!.bringToFront()
+            if (!gameOver) gameOverSound.start()
             gameOver = true
             return
         }
@@ -166,7 +170,7 @@ class GameView(context: Context,
         // GAME OBJECT
 
         // Player
-        player = Player(player_bitmaps)
+        player = Player(player_bitmaps, context)
 
         // Map
         map = TitleMap(map_bitmaps)
