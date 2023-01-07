@@ -6,9 +6,10 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
+import androidx.appcompat.app.AppCompatActivity
 import com.example.frontcamgame.gamepanel.Score
 
-class GameOver(score: Score) {
+class GameOver(score: Score): AppCompatActivity() {
     private var scorePlayer = score
 
     private final var endGame:String = "Game Over"

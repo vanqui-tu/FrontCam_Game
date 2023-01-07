@@ -17,7 +17,9 @@
 package com.example.frontcamgame.kotlin
 
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.text.Layout
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.view.View
@@ -37,6 +39,18 @@ import com.example.frontcamgame.kotlin.facedetector.FaceDetectorProcessor
 import com.example.frontcamgame.preference.PreferenceUtils
 import com.example.frontcamgame.preference.SettingsActivity
 import com.example.frontcamgame.preference.SettingsActivity.LaunchSource
+import com.facebook.share.model.ShareHashtag
+import com.facebook.share.model.SharePhoto
+import com.facebook.share.model.SharePhotoContent
+import com.facebook.share.widget.ShareDialog
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.tasks.await
 import java.io.IOException
 import java.util.ArrayList
 
@@ -54,16 +68,22 @@ class LivePreviewActivity :
   private var playAgainBtn: Button? = null
   private var homeBtn: Button? = null
   private var shareBtn: ImageView? = null
+  private var gameOverView: View? = null
+
+  private lateinit var db: FirebaseFirestore
+  private lateinit var auth: FirebaseAuth
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     Log.d(TAG, "onCreate")
     setContentView(R.layout.activity_vision_live_preview)
 
+    db = Firebase.firestore
+    auth = Firebase.auth
+
     preview = findViewById(R.id.preview_view) //
 
     gameView = findViewById(R.id.game_view)
-
     if (preview == null) {
       Log.d(TAG, "Preview is null")
     }
@@ -73,19 +93,41 @@ class LivePreviewActivity :
       Log.d(TAG, "graphicOverlay is null")
     }
 
+
     playAgainBtn = findViewById(R.id.playAgainBtn)
     playAgainBtn!!.setOnClickListener {
       gameView!!.resetAll()
+      gameOverView!!.visibility = if (gameOverView!!.visibility == View.GONE)
+                                  View.VISIBLE
+                                  else View.GONE
     }
 
     homeBtn = findViewById(R.id.homeBtn)
     homeBtn!!.setOnClickListener {
+      // intent to home
+      finish()
+      gameOverView!!.visibility = if (gameOverView!!.visibility == View.GONE)
+                                    View.VISIBLE
+                                    else View.GONE
     }
+
     shareBtn = findViewById(R.id.shareResult)
     shareBtn!!.setOnClickListener{
+      screen_share()
     }
-    gameView!!.getButtons(playAgainBtn, homeBtn)
 
+    gameOverView = findViewById(R.id.game_over_layout)
+    gameView!!.getViews(gameOverView!!)
+    gameView!!.callback = ::callback
+  }
+
+  fun callback() {
+    runBlocking {
+      launch {
+        add_score()
+        Log.d("Add score", "123")
+      }
+    }
   }
 
   @Synchronized
@@ -187,6 +229,77 @@ class LivePreviewActivity :
     if (cameraSource != null) {
       cameraSource?.release()
     }
+  }
+
+
+  private fun check_auth(): Boolean {
+    return auth.currentUser != null
+  }
+
+  private suspend fun check_existed_record(): Attempt? {
+    val user = auth.currentUser
+    var coll = db.collection("high_score")
+    var search_task = coll.whereEqualTo("uid", user!!.uid).get()
+    search_task.await()
+
+    if (search_task.isSuccessful)
+      if (search_task.result.size() > 0)
+        return getAttempt(search_task.result.elementAt(0))
+
+    return null
+  }
+
+  private suspend fun add_score() {
+    var score = gameView!!.getPlayScore()
+    if (score <= 0)
+      return
+
+    if (!check_auth())
+      return
+
+    var existed_record = check_existed_record()
+    Log.d("GameActivity", check_existed_record().toString())
+
+    val user = auth.currentUser
+    val data = hashMapOf(
+      "uid" to user?.uid,
+      "name" to (user?.displayName ?: ""),
+      "email" to (user?.email ?: ""),
+      "score" to score,
+      "avatar" to (user?.photoUrl?.toString() ?: "")
+    )
+    val coll = db.collection("high_score")
+    if (existed_record == null) {
+      coll.add(data)
+    }
+    else {
+      if (existed_record.score!! < score.toLong()) {
+        coll.whereEqualTo("uid", existed_record.uid).get().addOnSuccessListener {
+          if (it != null && it.size() > 0)
+            it.forEach { queryDocumentSnapshot ->
+              queryDocumentSnapshot.reference.update("score", score)
+            }
+        }
+      }
+    }
+
+  }
+
+  private fun screen_share() {
+    val screenshot: Bitmap = takeScreenshotOfView()
+    var sharePhoto: SharePhoto = SharePhoto.Builder().setBitmap(screenshot).setCaption("Caption").build()
+    var shareHashtag: ShareHashtag = ShareHashtag.Builder().setHashtag("hashtag").build()
+    var photoContent: SharePhotoContent = SharePhotoContent.Builder().addPhoto(sharePhoto).setShareHashtag(shareHashtag).build()
+    var dialog: ShareDialog = ShareDialog(this)
+    dialog.show(photoContent, ShareDialog.Mode.AUTOMATIC)
+  }
+
+  fun takeScreenshotOfView(): Bitmap {
+    var v1: View = window.decorView.rootView
+    v1.isDrawingCacheEnabled = true
+    var res: Bitmap = Bitmap.createBitmap(v1.drawingCache)
+    v1.isDrawingCacheEnabled = false
+    return res
   }
 
   companion object {

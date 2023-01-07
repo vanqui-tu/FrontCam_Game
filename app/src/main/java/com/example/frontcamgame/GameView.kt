@@ -9,6 +9,7 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.View
 import android.widget.Button
+import android.widget.TextView
 import com.example.frontcamgame.gamemap.TitleMap
 import com.example.frontcamgame.gameobject.BadApple
 import com.example.frontcamgame.gameobject.BonusApple
@@ -18,6 +19,7 @@ import com.example.mygame.gameobject.Player
 import com.example.mygame.gamepanel.GameOver
 import com.example.mygame.gamepanel.Perfomance
 import kotlinx.android.synthetic.main.activity_vision_live_preview.view.*
+import kotlin.properties.Delegates
 
 class GameView(context: Context,
                attributes: AttributeSet):
@@ -48,16 +50,17 @@ class GameView(context: Context,
     private var map: TitleMap? = null
 
     private var perfomance: Perfomance? = null
-    private var gameOver = false
-
-    private final var againButton : Button? = null
-    private final var homeButton : Button? = null
-
-    fun getButtons(again: Button?, home: Button?) {
-        againButton = again
-        homeButton = home
+    private var gameOver: Boolean by Delegates.observable(false) { property, old, new ->
+        if (new == true && old != new)
+            callback()
     }
 
+    private final var gameOverView: View? = null
+
+    fun getViews(view: View) {
+        gameOverView = view
+    }
+    lateinit var callback: () -> Unit
     init{
         // add callback
         holder.addCallback(this)
@@ -68,7 +71,6 @@ class GameView(context: Context,
         createBitmaps()
 
         resetAll()
-
         // GAME PANEL
         perfomance = Perfomance(thread)
     }
@@ -94,14 +96,10 @@ class GameView(context: Context,
 
     fun update(){
         if(player!!.getHealthPercentage() == 0){
-            if (againButton != null) {
-                againButton!!.visibility = View.VISIBLE
-                againButton!!.bringToFront()
-            }
-            if (homeButton != null) {
-                homeButton!!.visibility = View.VISIBLE
-                homeButton!!.bringToFront()
-            }
+            gameOverView!!.visibility = if (gameOverView!!.visibility == View.INVISIBLE)
+                                    View.VISIBLE
+                                    else View.INVISIBLE
+            gameOverView!!.bringToFront()
             gameOver = true
             return
         }
@@ -166,13 +164,6 @@ class GameView(context: Context,
 
     fun resetAll(){
         gameOver = false
-        if (againButton != null) {
-            againButton!!.visibility = (View.INVISIBLE)
-        }
-        if (homeButton != null) {
-            homeButton!!.visibility = (View.INVISIBLE)
-        }
-
         // GAME OBJECT
 
         // Player
