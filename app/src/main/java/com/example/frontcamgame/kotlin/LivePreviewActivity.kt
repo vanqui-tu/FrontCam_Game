@@ -84,6 +84,7 @@ class LivePreviewActivity :
     shareBtn = findViewById(R.id.shareResult)
     shareBtn!!.setOnClickListener{
     }
+    gameView!!.getButtons(playAgainBtn, homeBtn)
 
   }
 
