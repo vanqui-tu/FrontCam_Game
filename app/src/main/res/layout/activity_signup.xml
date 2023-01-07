@@ -5,7 +5,9 @@
     android:id="@+id/linearLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".pages.signup">
+    tools:context=".pages.signup"
+    android:background="@drawable/homepage"
+    >
 
     <LinearLayout
         android:id="@+id/signup_ll1"
@@ -25,6 +27,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Create a new account"
+            android:textColor="@color/white"
             android:textStyle="bold"
             android:textSize="26sp"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -35,13 +38,15 @@
             android:id="@+id/signup_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="25dp"
-            android:paddingVertical="10dp"
-            android:ems="10"
-            android:hint="email"
-            android:inputType="textPersonName"
+            android:layout_marginVertical="10dp"
             android:background="@drawable/et_rounded_border"
-            android:layout_marginVertical="10dp"/>
+            android:ems="10"
+            android:hint="Email"
+            android:inputType="textPersonName"
+            android:textColorHint="@color/white"
+            android:textColor="@color/white"
+            android:paddingHorizontal="25dp"
+            android:paddingVertical="10dp" />
 
 
         <EditText
@@ -49,8 +54,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="password"
+            android:hint="Password"
             android:inputType="textPassword"
+            android:textColorHint="@color/white"
+            android:textColor="@color/white"
             android:paddingHorizontal="25dp"
             android:paddingVertical="10dp"
             android:background="@drawable/et_rounded_border"
@@ -62,6 +69,8 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Confirm password"
+            android:textColorHint="@color/white"
+            android:textColor="@color/white"
             android:inputType="textPassword"
             android:paddingHorizontal="25dp"
             android:paddingVertical="10dp"
@@ -73,7 +82,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="sign up"
-            android:textColor="@color/white"
+            android:textColor="@color/red_button_text"
             android:textStyle="bold"
             android:background="@drawable/btn_home_rounded"
             android:layout_marginVertical="10dp"/>
@@ -94,14 +103,15 @@
             android:id="@+id/textView9"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Already have an account?" />
+            android:text="Already have an account?"
+            android:textColor="@color/white"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/signup_back_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Sign in"
-            android:textColor="@color/white"
+            android:textColor="@color/red_button_text"
             android:textStyle="bold"
             android:background="@drawable/btn_home_rounded"
             android:layout_marginVertical="10dp"/>

@@ -12,4 +12,6 @@
     <color name="blue">#4286f4</color>
     <color name="red">#f44242</color>
     <color name="black">#000000</color>
+
+    <color name="red_button_text">#C30101</color>
 </resources>
